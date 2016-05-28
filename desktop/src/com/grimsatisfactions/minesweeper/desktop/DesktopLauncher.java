@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.width = MineSweeperDemo.WIDTH;
 		config.height = MineSweeperDemo.HEIGHT;
 		config.title = MineSweeperDemo.TITLE;
+		config.resizable = false;
 		new LwjglApplication(new MineSweeperDemo(), config);
 	}
 }

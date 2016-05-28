@@ -1,12 +1,14 @@
 package board;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import java.lang.String;
+import java.util.ArrayList;
+
 import states.PlayState;
 import Input.MyInputHandler;
 
@@ -24,31 +26,27 @@ public class Space {
     private int                         i;                      //Space i value
     private int                         j;                      //Space j value
     private BoardHandler                boardHandler;           //Reference to boardHandler
-    private MyInputHandler              myInputHandler;
+    private MyInputHandler              myInputHandler;         //Reference to MyInputHandler
+    private PlayState                   playState;              //Reference to PlayState
+    private String                      spaceValue;             //What is this space
     public boolean                      isMine;                 //Is space a mine?
-    public boolean                      exposed;                //Is space exposed?
 
-    private enum SpaceState{
+    public enum SpaceState{
         Hidden,
         Exposed,
         Disarmed
     }
-    private SpaceState spaceState;
+    public SpaceState spaceState;
 
-    public Space(BoardHandler boardHandler, MyInputHandler myInputhandler, int i, int j)
+    public Space(BoardHandler boardHandler, MyInputHandler myInputhandler, PlayState playstate, int i, int j)
     {
         //boardHandler = boardHandler passed from PlayState
         this.boardHandler = boardHandler;
         this.myInputHandler = myInputhandler;
+        this.playState = playstate;
         this.i = i;
         this.j = j;
-        exposed = false;
         disarmedTexture = new Texture("flag.png");
-        //If board Cell == 'M" space isMine
-        if (boardHandler.getBoard()[i][j].equals("M"))
-        {
-            isMine = true;
-        }
         spaceState = SpaceState.Hidden;
     }
 
@@ -70,7 +68,13 @@ public class Space {
                     exposedTexture = new Texture("hitmine.png");
                     switchTexture(exposedTexture);
                     PlayState.gameOver = true;
-                } else {
+                }
+                else if (spaceValue.equals("0"))
+                {
+                    playState.checkAdjacentSpaces(this);
+                }
+                else
+                {
                     //If space is not mine set it to its exposed Texture
                     setExposedTexture();
                     switchTexture(exposedTexture);
@@ -121,43 +125,43 @@ public class Space {
     //Check each space against boardHandler's board and find what the space represents then set its exposed texture
     public void setExposedTexture()
     {
-        if (boardHandler.getBoard()[i][j].equals("M"))
+        if (spaceValue.equals("M"))
         {
             exposedTexture = new Texture("mine.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("0"))
+        else if (spaceValue.equals("0"))
         {
             exposedTexture = new Texture("exposed.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("1"))
+        else if (spaceValue.equals("1"))
         {
             exposedTexture = new Texture("number1.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("2"))
+        else if (spaceValue.equals("2"))
         {
             exposedTexture = new Texture("number2.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("3"))
+        else if (spaceValue.equals("3"))
         {
             exposedTexture = new Texture("number3.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("4"))
+        else if (spaceValue.equals("4"))
         {
             exposedTexture = new Texture("number4.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("5"))
+        else if (spaceValue.equals("5"))
         {
             exposedTexture = new Texture("number5.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("6"))
+        else if (spaceValue.equals("6"))
         {
             exposedTexture = new Texture("number6.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("7"))
+        else if (spaceValue.equals("7"))
         {
             exposedTexture = new Texture("number7.png");
         }
-        else if (boardHandler.getBoard()[i][j].equals("8"))
+        else if (spaceValue.equals("8"))
         {
             exposedTexture = new Texture("number8.png");
         }
@@ -192,6 +196,30 @@ public class Space {
     {
         return Gdx.graphics.getHeight() / boardHandler.getBoardSize();
     }
+
+    public int getI()
+    {
+        return i;
+    }
+
+    public int getJ()
+    {
+        return j;
+    }
+
+    public void setSpaceValue(String spaceValue)
+    {
+        this.spaceValue = spaceValue;
+
+        if (spaceValue.equals("M"))
+            isMine = true;
+    }
+
+    public String getSpaceValue()
+    {
+        return spaceValue;
+    }
+
     //Dispose of texture
     public void dispose()
     {

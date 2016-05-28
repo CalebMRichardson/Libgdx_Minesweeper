@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class BoardHandler {
 
-    private String                  board[][];              //String[][] which makes up the game 'board"
+    private String                  board[][];              //String[][] which makes up the game "board"
     private Random                  rand = new Random();    //Random Reference
     private int                     boardSize = 20;         //Board Size TODO change to width = 30 and height = 15
     private int                     numOfMines = 50;        //Number of mines on the board
@@ -100,7 +100,7 @@ public class BoardHandler {
         return Integer.toString(touchingMines);
     }
     //Check make sure index is inBounds
-    private boolean indexInBounds(int x, int y)
+    public boolean indexInBounds(int x, int y)
     {
         return (x >= 0) && (x < boardSize) && (y >= 0) && (y < boardSize);
     }

@@ -28,7 +28,6 @@ public class MineSweeperDemo extends ApplicationAdapter {
 		gsm.push(new PlayState(gsm));
 
 	}
-
     //Clear Screen
     //HandleInput
     //Update
