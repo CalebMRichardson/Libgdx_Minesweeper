@@ -103,7 +103,7 @@ public class PlayState extends State {
                 }
             }
             gsm.push(new GameOverState(gsm, this));
-        } //TODO Write space branch out for blank spaces
+        }
     }
     // Call render from each space
     @Override
@@ -118,9 +118,10 @@ public class PlayState extends State {
         }
         sb.end();
     }
-
+    //Check Adjacent Spaces using Recursion
     public void checkAdjacentSpaces(Space singleSpace)
-    {   //TODO CheckAdjacentSpaces is working for the most part. fixme its not fully checking all the north and south squares
+    {
+        // If Space is not exposed and the value is 1-8 expose the space
         if (singleSpace.spaceState != Space.SpaceState.Exposed && singleSpace.getSpaceValue().equals("1") ||
                 singleSpace.getSpaceValue().equals("2") || singleSpace.getSpaceValue().equals("3") ||
                 singleSpace.getSpaceValue().equals("4") || singleSpace.getSpaceValue().equals("5") ||
@@ -128,9 +129,11 @@ public class PlayState extends State {
                 singleSpace.getSpaceValue().equals("8"))
         {
             exposeSpace(singleSpace);
-            return;
         }
-        if (!singleSpace.getSpaceValue().equals("M") && singleSpace.spaceState != Space.SpaceState.Exposed)
+        // If space value is not an Mine and it is not exposed
+        //Get Space I and J value
+        //Expose this space and then check its neighbors recursivley
+        else if (!singleSpace.getSpaceValue().equals("M") && singleSpace.spaceState != Space.SpaceState.Exposed)
         {
             int i = singleSpace.getI();
             int j = singleSpace.getJ();
@@ -141,8 +144,9 @@ public class PlayState extends State {
             {
                 for (int jj = j - 1; jj < j + 2; jj++)
                 {
-                    if (boardHandler.indexInBounds(ii, jj)) {
-                        if (space[ii][j].spaceState != Space.SpaceState.Exposed)
+                    if (boardHandler.indexInBounds(ii, jj))
+                    {
+                        if (space[ii][jj].spaceState != Space.SpaceState.Exposed)
                         {
                             checkAdjacentSpaces(space[ii][jj]);
                         }
@@ -150,13 +154,12 @@ public class PlayState extends State {
                 }
             }
         }
-
         else
         {
             return;
         }
     }
-
+    //Expose Space
     private void exposeSpace(Space space)
     {
         space.setExposedTexture();
