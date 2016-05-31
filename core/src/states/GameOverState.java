@@ -9,6 +9,11 @@ public class GameOverState extends State {
 
     private PlayState playState;
 
+    // Used for both GameOver and GameWin
+    //Check PlayState.gameOver and PlayState.gameWin
+    //Create new Frame with "youWin/GameOver" would you like to play again?
+    //On Yes Push Gsm new Playstate if No Close Game
+
     public GameOverState(GameStateManager gsm, PlayState playState)
     {
         super(gsm);
@@ -32,6 +37,6 @@ public class GameOverState extends State {
 
     @Override
     public void dispose() {
-        //TODO Dispose PlayState
+       playState.dispose();
     }
 }

@@ -63,24 +63,22 @@ public class Space {
     {
         if (mouseOver()) {
             if (MyInputHandler.leftMouseDown) {
-                if (isMine) {
-                    //If space isMine set it to hitmine.png
-                    exposedTexture = new Texture("hitmine.png");
-                    switchTexture(exposedTexture);
-                    PlayState.gameOver = true;
-                }
-                else if (spaceValue.equals("0"))
-                {
-                    playState.checkAdjacentSpaces(this);
-                }
-                else
-                {
-                    //If space is not mine set it to its exposed Texture
-                    setExposedTexture();
-                    switchTexture(exposedTexture);
+                if (spaceState == SpaceState.Hidden) {
+                    if (isMine) {
+                        //If space isMine set it to hitmine.png
+                        exposedTexture = new Texture("hitmine.png");
+                        switchTexture(exposedTexture);
+                        PlayState.gameOver = true;
+                    } else if (spaceValue.equals("0")) {
+                        playState.checkAdjacentSpaces(this);
+                    } else {
+                        //If space is not mine set it to its exposed Texture
+                        setExposedTexture();
+                        switchTexture(exposedTexture);
+                    }
+                    spaceState = SpaceState.Exposed;
                 }
                 MyInputHandler.leftMouseDown = false;
-                spaceState = SpaceState.Exposed;
             }
             if (MyInputHandler.rightMouseDown) {
                 switch (spaceState) {
@@ -90,6 +88,7 @@ public class Space {
                         switchTexture(disarmedTexture);
                         PlayState.disarmFlags = PlayState.disarmFlags - 1;
                         spaceState = SpaceState.Disarmed;
+                        playState.checkForWin();
                         break;
                     case Disarmed:
                         switchTexture(hiddenTexture);

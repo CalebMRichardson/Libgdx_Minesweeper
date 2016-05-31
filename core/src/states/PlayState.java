@@ -18,20 +18,19 @@ public class PlayState extends State {
 
     private Space                   space[][];          //2D Array of space Reference's
     private BoardHandler            boardHandler;       //Reference to BoardHandler.java
-    private MyInputHandler          myInputHandler;
+    private MyInputHandler          myInputHandler;     //Reference to MyInputHandler
     public static boolean           gameOver;           //GameOver
+    public static boolean           gameWin;            //Game Is Won
     public static int               disarmFlags;        //Number of disarmed Flags
-    private ArrayList<Space>        alreadyDone;
 
     public PlayState(GameStateManager gsm)
     {
         super(gsm);
 
         gameOver = false;
-
+        gameWin = false;
         boardHandler = new BoardHandler();
         myInputHandler = new MyInputHandler();
-        alreadyDone = new ArrayList<Space>();
         Gdx.input.setInputProcessor(myInputHandler);
         boardHandler.createBoard();
         disarmFlags = boardHandler.getNumOfMines();
@@ -104,6 +103,10 @@ public class PlayState extends State {
             }
             gsm.push(new GameOverState(gsm, this));
         }
+        if (gameWin)
+        {
+            gsm.push(new GameOverState(gsm, this));
+        }
     }
     // Call render from each space
     @Override
@@ -159,6 +162,28 @@ public class PlayState extends State {
             return;
         }
     }
+
+    public void checkForWin()
+    {
+        boolean allMinesDisarmed = true;
+
+        for (int i = 0; i < boardHandler.getBoardSize(); i++)
+        {
+            for (int j = 0; j < boardHandler.getBoardSize(); j++)
+            {
+                if (space[i][j].isMine)
+                {
+                    if (space[i][j].spaceState != Space.SpaceState.Disarmed)
+                    {
+                        allMinesDisarmed = false;
+                    }
+                }
+            }
+        }
+
+        gameWin = allMinesDisarmed;
+    }
+
     //Expose Space
     private void exposeSpace(Space space)
     {
