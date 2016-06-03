@@ -2,6 +2,7 @@ package states;
 
 import Input.MyInputHandler;
 import board.BoardHandler;
+import board.ResetSpace;
 import board.Space;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor;
@@ -18,6 +19,7 @@ public class PlayState extends State {
 
     private Space                   space[][];          //2D Array of space Reference's
     private BoardHandler            boardHandler;       //Reference to BoardHandler.java
+    private ResetSpace              resetSpace;         //Reference to ResetSpace
     private MyInputHandler          myInputHandler;     //Reference to MyInputHandler
     public static boolean           gameOver;           //GameOver
     public static boolean           gameWin;            //Game Is Won
@@ -31,6 +33,7 @@ public class PlayState extends State {
         gameWin = false;
         boardHandler = new BoardHandler();
         myInputHandler = new MyInputHandler();
+        resetSpace = new ResetSpace(boardHandler, gsm);
         Gdx.input.setInputProcessor(myInputHandler);
         boardHandler.createBoard();
         disarmFlags = boardHandler.getNumOfMines();
@@ -67,6 +70,8 @@ public class PlayState extends State {
 
         cam.unproject(mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
+        resetSpace.handleInput(mousePos);
+
         for (int i = 0; i < boardHandler.getBoardSize(); i++)
         {
             for (int j = 0; j < boardHandler.getBoardSize(); j++)
@@ -79,6 +84,8 @@ public class PlayState extends State {
     //Call Update for each space
     @Override
     public void update(float dt) {
+        resetSpace.update(dt);
+
         for(int i = 0; i < boardHandler.getBoardSize(); i++)
         {
             for (int j = 0; j < boardHandler.getBoardSize(); j++)
@@ -94,24 +101,32 @@ public class PlayState extends State {
             {
                 for (int j = 0; j < boardHandler.getBoardSize(); j++)
                 {
-                    if (space[i][j].isMine == true && space[i][j].spaceState != Space.SpaceState.Exposed)
+                    //If Spaces is a mine and it is not exposed
+                    if (space[i][j].isMine == true && space[i][j].spaceState != Space.SpaceState.Exposed)               //TODO fix condition where disarmed non mine spaces not being exposed to wrongmine.png
                     {
-                        space[i][j].setExposedTexture();
-                        space[i][j].switchTexture(space[i][j].getExposedTexture());
+                        //If the space has not already been disarmed
+                        if (space[i][j].spaceState != Space.SpaceState.Disarmed) {
+                            space[i][j].setExposedTexture();
+                            space[i][j].switchTexture(space[i][j].getExposedTexture());
+                        }
                     }
                 }
             }
-            gsm.push(new GameOverState(gsm, this));
+            gsm.push(new GameOverState(gsm, this, resetSpace));
         }
+        //If GameWin create new State - GameOverState -
         if (gameWin)
         {
-            gsm.push(new GameOverState(gsm, this));
+            gsm.push(new GameOverState(gsm, this, resetSpace));
         }
     }
     // Call render from each space
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
+
+        resetSpace.render(sb);
+
         for (int i = 0; i < boardHandler.getBoardSize(); i++)
         {
             for (int j = 0; j < boardHandler.getBoardSize(); j++)
@@ -180,7 +195,6 @@ public class PlayState extends State {
                 }
             }
         }
-
         gameWin = allMinesDisarmed;
     }
 

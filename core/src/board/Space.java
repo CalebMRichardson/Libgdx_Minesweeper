@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import java.lang.String;
 import java.util.ArrayList;
 
+import com.grimsatisfactions.minesweeper.MineSweeperDemo;
 import states.PlayState;
 import Input.MyInputHandler;
 
@@ -188,12 +189,12 @@ public class Space {
     //return width (dynamically)
     private float width()
     {
-        return Gdx.graphics.getWidth() / boardHandler.getBoardSize();
+        return MineSweeperDemo.WIDTH / boardHandler.getBoardSize();
     }
     //return height (dynamically)
     private float height()
     {
-        return Gdx.graphics.getHeight() / boardHandler.getBoardSize();
+        return (MineSweeperDemo.HEIGHT - MineSweeperDemo.YBUFFER) / boardHandler.getBoardSize();
     }
 
     public int getI()

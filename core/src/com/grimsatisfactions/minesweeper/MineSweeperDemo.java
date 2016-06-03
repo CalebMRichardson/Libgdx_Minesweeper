@@ -10,7 +10,8 @@ import states.PlayState;
 public class MineSweeperDemo extends ApplicationAdapter {
 
 	public static final int 					WIDTH = 400;                //Game Frame WIDTH
-	public static final int 					HEIGHT = 400;               //Game Frame HEIGHT
+	public static final int 					HEIGHT = 430;               //Game Frame HEIGHT
+	public static final int						YBUFFER = 30; 				// Small Buffer at top of frame
 	public static final String 					TITLE = "Mine_Sweeper";     //Game Frame TITLE
 
 	private GameStateManager 					gsm;                        //GameStateManager reference
@@ -24,7 +25,7 @@ public class MineSweeperDemo extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
-		Gdx.gl.glClearColor(0,0,0,1);
+		Gdx.gl.glClearColor((float)221/255, (float)221/255, (float)221/255,0);
 		gsm.push(new PlayState(gsm));
 
 	}

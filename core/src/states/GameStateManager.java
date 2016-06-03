@@ -9,7 +9,7 @@ import java.util.Stack;
  */
 public class GameStateManager {
 
-    private Stack<State>                    states;             //Reference Stack of states
+    private Stack<State>            states;//Reference Stack of states
 
     public GameStateManager()
     {
