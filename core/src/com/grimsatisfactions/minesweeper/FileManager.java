@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
  */
 public class FileManager {
 
+    /* Strings containing all the used file names */
     public static final String BLANK = "blank.png";
     public static final String EXPOSED = "exposed.png";
     public static final String FLAG = "flag.png";
@@ -25,6 +26,8 @@ public class FileManager {
     public static final String NUMBER7 = "number7.png";
     public static final String NUMBER8 = "number8.png";
 
+    //Checks to make sure internal file exists and returns string of file
+    //If file does not exist run fileIsNull() and return the wrongmine.png file (as a default)
     public static String getTexture(String tex)
     {
         if (Gdx.files.internal(tex).exists())
@@ -35,6 +38,7 @@ public class FileManager {
         return "wrongmine.png";
     }
 
+    //Create a message saying the file does not exist
     private static void fileIsNull(String tex)
     {
         String message = "File '" + tex + "' does not exist.";

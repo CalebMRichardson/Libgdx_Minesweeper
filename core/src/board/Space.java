@@ -89,10 +89,13 @@ public class Space {
                     case Exposed:
                         break;
                     case Hidden:
-                        switchTexture(disarmedTexture);
-                        PlayState.disarmFlags = PlayState.disarmFlags - 1;
-                        spaceState = SpaceState.Disarmed;
-                        playState.checkForWin();
+                        //If the we still have disarmFlags left
+                        if (PlayState.disarmFlags > 0) {
+                            switchTexture(disarmedTexture);
+                            PlayState.disarmFlags = PlayState.disarmFlags - 1;
+                            spaceState = SpaceState.Disarmed;
+                            playState.checkForWin();
+                        }
                         break;
                     case Disarmed:
                         switchTexture(hiddenTexture);
@@ -169,6 +172,7 @@ public class Space {
             exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER8));
         }
     }
+    //Set Texture
     public void setTexture(String tex)
     {
         if (exposedTexture == null)

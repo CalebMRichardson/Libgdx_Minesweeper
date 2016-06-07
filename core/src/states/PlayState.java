@@ -104,7 +104,7 @@ public class PlayState extends State {
                 for (int j = 0; j < boardHandler.getBoardSize(); j++)
                 {
                     //If Spaces is a mine and it is not exposed
-                    if (space[i][j].isMine == true && space[i][j].spaceState != Space.SpaceState.Exposed)               //TODO fix condition where disarmed non mine spaces not being exposed to wrongmine.png
+                    if (space[i][j].isMine == true && space[i][j].spaceState != Space.SpaceState.Exposed)
                     {
                         //If the space has not already been disarmed
                         if (space[i][j].spaceState != Space.SpaceState.Disarmed) {
@@ -112,17 +112,20 @@ public class PlayState extends State {
                             space[i][j].switchTexture(space[i][j].getExposedTexture());
                         }
                     }
+                    //If Space is not mine and the player has disarmed it set it to a wrongmine
                     if (space[i][j].isMine == false && space[i][j].spaceState == Space.SpaceState.Disarmed)
                     {
                         space[i][j].setTexture(FileManager.getTexture(FileManager.WRONGMINE));
                     }
                 }
             }
+            //Game Over
             gsm.push(new GameOverState(gsm, this, resetSpace));
         }
         //If GameWin create new State - GameOverState -
         if (gameWin)
         {
+            //GameOver
             gsm.push(new GameOverState(gsm, this, resetSpace));
         }
     }
@@ -145,8 +148,8 @@ public class PlayState extends State {
     //Check Adjacent Spaces using Recursion
     public void checkAdjacentSpaces(Space singleSpace)
     {
-        // If Space is not exposed and the value is 1-8 expose the space
-        if (singleSpace.spaceState != Space.SpaceState.Exposed && singleSpace.getSpaceValue().equals("1") ||
+        // If Space is hidden and the value is 1-8 expose the space
+        if (singleSpace.spaceState == Space.SpaceState.Hidden && singleSpace.getSpaceValue().equals("1") ||
                 singleSpace.getSpaceValue().equals("2") || singleSpace.getSpaceValue().equals("3") ||
                 singleSpace.getSpaceValue().equals("4") || singleSpace.getSpaceValue().equals("5") ||
                 singleSpace.getSpaceValue().equals("6") || singleSpace.getSpaceValue().equals("7") ||
@@ -154,7 +157,7 @@ public class PlayState extends State {
         {
             exposeSpace(singleSpace);
         }
-        // If space value is not an Mine and it is not exposed
+        //If space value is not an Mine and it is Hidden
         //Get Space I and J value
         //Expose this space and then check its neighbors recursivley
         else if (!singleSpace.getSpaceValue().equals("M") && singleSpace.spaceState == Space.SpaceState.Hidden)
@@ -184,16 +187,19 @@ public class PlayState extends State {
         }
     }
 
+    //Check for win condition
     public void checkForWin()
     {
         boolean allMinesDisarmed = true;
-
+        //Loop Through board
         for (int i = 0; i < boardHandler.getBoardSize(); i++)
         {
             for (int j = 0; j < boardHandler.getBoardSize(); j++)
             {
+                //If the space is a mine...
                 if (space[i][j].isMine)
                 {
+                    //... if the space is not disarmed then all mines are not disarmed
                     if (space[i][j].spaceState != Space.SpaceState.Disarmed)
                     {
                         allMinesDisarmed = false;

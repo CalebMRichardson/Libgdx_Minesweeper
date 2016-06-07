@@ -7,12 +7,13 @@ import java.util.Random;
  */
 public class BoardHandler {
 
-    private String                  board[][];              //String[][] which makes up the game "board"
-    private Random                  rand = new Random();    //Random Reference
-    private int                     boardSize = 20;         //Board Size TODO change to width = 30 and height = 15
-    private int                     numOfMines = 5;        //Number of mines on the board
+    private String                  board[][];                          //String[][] which makes up the game "board"
+    private Random                  rand = new Random();                //Random Reference
+    private int                     boardSize = 20;                     //Board Size
+    private int                     numOfMines = 50;                    //Number of mines on the board
+    private final int               initialNumOfMines = numOfMines;     //Number of Mines at start
 
-    //Set boad[][] to boardSize (width height)
+    //Set board[][] to boardSize (width height)
     public BoardHandler()
     {
         board = new String[boardSize][boardSize];
@@ -116,8 +117,9 @@ public class BoardHandler {
         return boardSize;
     }
 
+    //Return num of mines in game at start
     public int getNumOfMines()
     {
-        return numOfMines;
+        return initialNumOfMines;
     }
 }

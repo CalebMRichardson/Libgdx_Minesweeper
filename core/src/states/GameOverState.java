@@ -8,15 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class GameOverState extends State {
 
-    private PlayState           playState;
-    private ResetSpace          resetSpace;
-
-    // Used for both GameOver and GameWin
-    //Check PlayState.gameOver and PlayState.gameWin
-    //Create new Frame with "youWin/GameOver" would you like to play again?
-    //On Yes Push Gsm new PlayState if No Close Game
-
-    //TODO Add Comments
+    private PlayState           playState;      //PlayState Reference
+    private ResetSpace          resetSpace;     //ResetSpace Reference (Only update called in this GameState)
 
     public GameOverState(GameStateManager gsm, PlayState playState, ResetSpace resetSpace)
     {

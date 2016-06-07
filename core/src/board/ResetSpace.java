@@ -17,24 +17,21 @@ import states.PlayState;
  */
 public class ResetSpace {
 
-    private Vector3             mousePos;
-    private Vector2             pos;
-    private BoardHandler        boardHandler;
-    private GameStateManager    gsm;
-    private Texture             defaultTex;
-    private Texture             exposedTex;
-    private Sprite              sprite;
+    private Vector3             mousePos;           //Mouse Position in games space
+    private Vector2             pos;                //ResetSpace position
+    private BoardHandler        boardHandler;       //Reference to boardHandler
+    private GameStateManager    gsm;                //Reference to GameStateManager
+    private Texture             defaultTex;         //Default texture "blank.png"
+    private Sprite              sprite;             //ResetSpace Sprite Reference
 
-
-    //TODO Add comments
-
+    //Set BoardHandler and GSM
+    //Create Sprite for ResetSpace
     public ResetSpace(BoardHandler boardHandler, GameStateManager gsm)
     {
         this.boardHandler = boardHandler;
         this.gsm = gsm;
 
         defaultTex = new Texture(FileManager.getTexture(FileManager.BLANK));
-        exposedTex = new Texture(FileManager.getTexture(FileManager.EXPOSED));
 
         pos = new Vector2((MineSweeperDemo.WIDTH / 2) - (width() / 2), (MineSweeperDemo.HEIGHT - ((MineSweeperDemo.YBUFFER / 2) + (height() / 2))));
 
@@ -43,11 +40,12 @@ public class ResetSpace {
         sprite.setPosition(pos.x, pos.y);
     }
 
+    //HandleInput (update mouse pos)
     public void handleInput(Vector3 mousePos)
     {
         this.mousePos = mousePos;
     }
-
+    //Game Update Step check for mouseover and leftMouseDown
     public void update(float dt)
     {
         if (mouseOver())
@@ -59,12 +57,12 @@ public class ResetSpace {
             }
         }
     }
-
+    //Draw to screen
     public void render(SpriteBatch sb)
     {
         sb.draw(sprite, pos.x, pos.y, width(), height());
     }
-
+    //If mouse is over this
     private boolean mouseOver()
     {
         return sprite.getBoundingRectangle().contains(mousePos.x, mousePos.y);
@@ -79,7 +77,7 @@ public class ResetSpace {
     {
         return MineSweeperDemo.HEIGHT / boardHandler.getBoardSize();
     }
-
+    //On Reset Dispose of textures and set new PlayState
     private void reset()
     {
         dispose();
@@ -89,7 +87,7 @@ public class ResetSpace {
 
     public void dispose()
     {
-        defaultTex.dispose();
-        exposedTex.dispose();
+        if (defaultTex != null)
+            defaultTex.dispose();
     }
 }
