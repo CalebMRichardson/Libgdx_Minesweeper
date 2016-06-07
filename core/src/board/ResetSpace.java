@@ -1,11 +1,13 @@
 package board;
 
 import Input.MyInputHandler;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.grimsatisfactions.minesweeper.FileManager;
 import com.grimsatisfactions.minesweeper.MineSweeperDemo;
 import states.GameStateManager;
 import states.PlayState;
@@ -30,8 +32,9 @@ public class ResetSpace {
     {
         this.boardHandler = boardHandler;
         this.gsm = gsm;
-        defaultTex = new Texture("blank.png");
-        exposedTex = new Texture("exposed.png");
+
+        defaultTex = new Texture(FileManager.getTexture(FileManager.BLANK));
+        exposedTex = new Texture(FileManager.getTexture(FileManager.EXPOSED));
 
         pos = new Vector2((MineSweeperDemo.WIDTH / 2) - (width() / 2), (MineSweeperDemo.HEIGHT - ((MineSweeperDemo.YBUFFER / 2) + (height() / 2))));
 

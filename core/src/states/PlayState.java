@@ -6,8 +6,10 @@ import board.ResetSpace;
 import board.Space;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.grimsatisfactions.minesweeper.FileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class PlayState extends State {
     private MyInputHandler          myInputHandler;     //Reference to MyInputHandler
     public static boolean           gameOver;           //GameOver
     public static boolean           gameWin;            //Game Is Won
-    public static int               disarmFlags;        //Number of disarmed Flags
+    public static int               disarmFlags;        //Number of disarm Flags
 
     public PlayState(GameStateManager gsm)
     {
@@ -56,7 +58,7 @@ public class PlayState extends State {
     private void createSpace(int i, int j)
     {
         space[i][j] = new Space(boardHandler, myInputHandler, this, i, j);
-        space[i][j].createSprite("blank.png");
+        space[i][j].createSprite(FileManager.getTexture(FileManager.BLANK));
         space[i][j].setPosition();
         space[i][j].setSpaceValue(boardHandler.getBoard()[i][j]);
     }
@@ -110,6 +112,10 @@ public class PlayState extends State {
                             space[i][j].switchTexture(space[i][j].getExposedTexture());
                         }
                     }
+                    if (space[i][j].isMine == false && space[i][j].spaceState == Space.SpaceState.Disarmed)
+                    {
+                        space[i][j].setTexture(FileManager.getTexture(FileManager.WRONGMINE));
+                    }
                 }
             }
             gsm.push(new GameOverState(gsm, this, resetSpace));
@@ -151,7 +157,7 @@ public class PlayState extends State {
         // If space value is not an Mine and it is not exposed
         //Get Space I and J value
         //Expose this space and then check its neighbors recursivley
-        else if (!singleSpace.getSpaceValue().equals("M") && singleSpace.spaceState != Space.SpaceState.Exposed)
+        else if (!singleSpace.getSpaceValue().equals("M") && singleSpace.spaceState == Space.SpaceState.Hidden)
         {
             int i = singleSpace.getI();
             int j = singleSpace.getJ();

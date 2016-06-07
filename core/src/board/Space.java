@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import java.io.File;
 import java.lang.String;
 import java.util.ArrayList;
 
+import com.grimsatisfactions.minesweeper.FileManager;
 import com.grimsatisfactions.minesweeper.MineSweeperDemo;
 import states.PlayState;
 import Input.MyInputHandler;
@@ -47,7 +50,7 @@ public class Space {
         this.playState = playstate;
         this.i = i;
         this.j = j;
-        disarmedTexture = new Texture("flag.png");
+        disarmedTexture = new Texture(FileManager.getTexture(FileManager.FLAG));
         spaceState = SpaceState.Hidden;
     }
 
@@ -67,7 +70,7 @@ public class Space {
                 if (spaceState == SpaceState.Hidden) {
                     if (isMine) {
                         //If space isMine set it to hitmine.png
-                        exposedTexture = new Texture("hitmine.png");
+                        exposedTexture = new Texture(FileManager.getTexture(FileManager.HITMINE));
                         switchTexture(exposedTexture);
                         PlayState.gameOver = true;
                     } else if (spaceValue.equals("0")) {
@@ -118,7 +121,7 @@ public class Space {
     //Set SpriteSize (dynamically)
     public void createSprite(String name)
     {
-        hiddenTexture = new Texture(name);
+        hiddenTexture = new Texture(FileManager.getTexture(name));
         sprite = new Sprite(hiddenTexture);
         sprite.setSize(width(), height());
     }
@@ -127,44 +130,55 @@ public class Space {
     {
         if (spaceValue.equals("M"))
         {
-            exposedTexture = new Texture("mine.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.MINE));
         }
         else if (spaceValue.equals("0"))
         {
-            exposedTexture = new Texture("exposed.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.EXPOSED));
         }
         else if (spaceValue.equals("1"))
         {
-            exposedTexture = new Texture("number1.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER1));
         }
         else if (spaceValue.equals("2"))
         {
-            exposedTexture = new Texture("number2.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER2));
         }
         else if (spaceValue.equals("3"))
         {
-            exposedTexture = new Texture("number3.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER3));
         }
         else if (spaceValue.equals("4"))
         {
-            exposedTexture = new Texture("number4.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER4));
         }
         else if (spaceValue.equals("5"))
         {
-            exposedTexture = new Texture("number5.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER5));
         }
         else if (spaceValue.equals("6"))
         {
-            exposedTexture = new Texture("number6.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER6));
         }
         else if (spaceValue.equals("7"))
         {
-            exposedTexture = new Texture("number7.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER7));
         }
         else if (spaceValue.equals("8"))
         {
-            exposedTexture = new Texture("number8.png");
+            exposedTexture = new Texture(FileManager.getTexture(FileManager.NUMBER8));
         }
+    }
+    public void setTexture(String tex)
+    {
+        if (exposedTexture == null)
+            exposedTexture = new Texture(tex);
+        else
+        {
+            exposedTexture.dispose();
+            exposedTexture = new Texture(tex);
+        }
+        switchTexture(exposedTexture);
     }
     //switch sprite to texture
     //set sprite size (dynamically)
