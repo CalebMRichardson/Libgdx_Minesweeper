@@ -5,11 +5,14 @@ import board.BoardHandler;
 import board.ResetSpace;
 import board.Space;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.grimsatisfactions.minesweeper.FileManager;
+import com.grimsatisfactions.minesweeper.MineSweeperDemo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ public class PlayState extends State {
     private BoardHandler            boardHandler;       //Reference to BoardHandler.java
     private ResetSpace              resetSpace;         //Reference to ResetSpace
     private MyInputHandler          myInputHandler;     //Reference to MyInputHandler
+    private BitmapFont              font;               //Reference to BitMapFont
     public static boolean           gameOver;           //GameOver
     public static boolean           gameWin;            //Game Is Won
     public static int               disarmFlags;        //Number of disarm Flags
@@ -33,15 +37,22 @@ public class PlayState extends State {
 
         gameOver = false;
         gameWin = false;
+
         boardHandler = new BoardHandler();
         myInputHandler = new MyInputHandler();
         resetSpace = new ResetSpace(boardHandler, gsm);
+
+        font = new BitmapFont();
+        font.setColor(Color.RED);
+
         Gdx.input.setInputProcessor(myInputHandler);
+
         boardHandler.createBoard();
+
         disarmFlags = boardHandler.getNumOfMines();
+
         //Set Space size to boardHandler.getBoardSize() for X and Y
         space = new Space[boardHandler.getBoardSize()][boardHandler.getBoardSize()];
-
         //Loop through and create each space
         for (int i = 0; i < boardHandler.getBoardSize(); i++)
         {
@@ -135,7 +146,7 @@ public class PlayState extends State {
         sb.begin();
 
         resetSpace.render(sb);
-
+        font.draw(sb, Integer.toString(disarmFlags), 25, (MineSweeperDemo.HEIGHT - (MineSweeperDemo.YBUFFER / 2)));
         for (int i = 0; i < boardHandler.getBoardSize(); i++)
         {
             for (int j = 0; j < boardHandler.getBoardSize(); j++)
@@ -228,5 +239,6 @@ public class PlayState extends State {
                 space[i][j].dispose();
             }
         }
+        font.dispose();
     }
 }
